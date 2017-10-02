@@ -1,0 +1,55 @@
+---
+title: "Babe Ruth Homerun and Strike Out Statistics"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+library(Lahman)
+library(ggplot2)
+result <- Batting%>%
+            filter(playerID == "ruthba01")%>%
+            select(SO, HR, yearID)
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+Babe Ruth was a power hitter for the New York Yankees.  He held the MLB record for the most homeruns hit in a season until the 1960s.  He also held the record for the most career homeruns until the 1970s.  These graphics show the homeruns and strike out totals over the course of his career.  
+
+Row {data-height=600}
+-----------------------------------------------------------------------
+
+### Strikeouts vs Homeruns
+
+```{r}
+ggplot()+
+  geom_point(data = result, aes(x = SO, y = HR))+
+  xlab("Strikeouts")+
+  ylab("Homeruns")
+```
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### Homerun Distribution
+
+```{r}
+ggplot()+
+  geom_histogram(data = result, aes(x = HR), bins = 5, color = "blue", fill = "white")+
+  xlab("Homeruns")
+```
+
+### Homeruns over Career
+
+```{r}
+ggplot()+
+  geom_point(data = result, aes(x = yearID, y = HR))+
+  geom_line(data = result, aes(x = yearID, y = HR))+
+  xlab("Year")+
+  ylab("Homeruns")
+```
+
